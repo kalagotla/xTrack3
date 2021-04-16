@@ -26,9 +26,9 @@ C
       DO N=1,189
         rhop = 819
         dp = 0.281e-6
-      	KSTREAM = 0
-      	CALL V3_2DW23D(IXP, IYP, KC, X0, CELL, IC, IXY, DTRP, XY, XYZ)
-      	IF(KC .EQ. 0) RETURN
+        KSTREAM = 0
+        CALL V3_2DW23D(IXP, IYP, KC, X0, CELL, IC, IXY, DTRP, XY, XYZ)
+        IF(KC .EQ. 0) RETURN
 C
         X0(1) = 13.3*1e-3
         X0(2) = 0.409091*1e-3

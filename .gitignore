@@ -1,6 +1,8 @@
 # Compiled source #
 ###################
 *.o
+*.out
+init
 
 # Output files #
 ################

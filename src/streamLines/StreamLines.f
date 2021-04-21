@@ -13,9 +13,8 @@ C
       INTEGER CEL1(4,*),   CEL2(5,*),  CEL3(6,*),   CEL4(8,*)
       INTEGER CCEL1(4,*),  CCEL2(5,*), CCEL3(5,*),  CCEL4(6,*)
       INTEGER NPOLYT(8,*), POLYT(*),   CPOLYT(2,*), BLOCKS(6,*)
-      INTEGER CBLOCK(*), N
+      INTEGER CBLOCK(*), N, Np
       REAL    rhop, dp, nu, sigma, delta1
-      INTEGER dpInt
       CHARACTER*32 name
       CHARACTER*200 location
 C
@@ -23,31 +22,33 @@ C
 C
       Common /Orkwis/ rhop, dp
       CALL CPU_TIME(start)
-      DO N=1,189
-        rhop = 819
-        dp = 0.281e-6
-        KSTREAM = 0
-        CALL V3_2DW23D(IXP, IYP, KC, X0, CELL, IC, IXY, DTRP, XY, XYZ)
-        IF(KC .EQ. 0) RETURN
+      DO Np = 557, 573
+          DO N = 1, 189
+            rhop = 819
+            dp = Np * 1e-9
+            KSTREAM = 0
+            CALL V3_2DW23D(IXP, IYP, KC, X0, CELL,
+     &                     IC, IXY, DTRP, XY, XYZ)
+            IF(KC .EQ. 0) RETURN
 C
-        X0(1) = 13.3*1e-3
-        X0(2) = 0.409091*1e-3
-        X0(3) = (0.35*N*1e-3)/100.0
-
-        dpInt = dp*1e9
-        write(location,*) '../../output/umData/'
-        write(name,'(I0,A,I0,A,I0)') dpInt, '/Z', dpInt, '.', N
-        open(unit=77,file=TRIM(ADJUSTL(location))//name,
-     &                  form='formatted',status='unknown')
-        Print*, 'Particle number=', N
-        Print*, 'Spawned at', X0
-      	CALL V3_CalcSL(X0, KC, ID, XYZ, V, CEL1, CCEL1, CEL2, CCEL2,
+            X0(1) = 13.3*1e-3
+            X0(2) = 0.409091*1e-3
+            X0(3) = (0.35*N*1e-3)/100.0
+C
+            write(location,*) '../../output/umData/'
+            write(name,'(I0,A,I0,A,I0)') Np, '/Z', Np, '.', N
+            open(unit=77,file=TRIM(ADJUSTL(location))//name,
+     &                   form='formatted',status='unknown')
+            print*, 'Particle size and number=', Np, N
+            print*, 'Spawned at', X0
+            CALL V3_CalcSL(X0, KC, ID, XYZ, V, CEL1, CCEL1, CEL2, CCEL2,
      &               CEL3, CCEL3, CEL4, CCEL4, NPOLYT, POLYT, CPOLYT,
      &               BLOCKS, CBLOCK)
-        close(77)
+            close(77)
+          ENDDO
       ENDDO
       CALL CPU_TIME(finish)
-      Print*, 'ELAPSED CPU TIME = ', finish-start
+      print*, 'ELAPSED CPU TIME = ', finish-start
  77   RETURN
       END
 
@@ -2234,7 +2235,7 @@ C
 
         rho_av = SUM(rho)/SIZE(rho)
         T_av = SUM(T)/SIZE(T)
-        Knd = 1.26*(SQRT(mu*1.4/(rho_av*dp*SQRT(1.4*R*T_av))))
+c        Knd = 1.26*(SQRT(mu*1.4/(rho_av*dp*SQRT(1.4*R*T_av))))
 c	print*, Knd, rho_av, T_av, mu
         IF(ABS(Rer) .LE. 1e-7) THEN
             C_DRAG = 0

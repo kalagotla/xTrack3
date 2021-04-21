@@ -23,4 +23,6 @@ StreamLines.o: $(SDIR)StreamLines.f
 clean:
 	rm -f $(BDIR)StreamLines.o
 	@cp $(LDIR)libVisual3OLD.a $(LDIR)libVisual3.a
+	@sudo sh -c "echo 1 > /proc/sys/vm/drop_caches"
 	@echo "Library file is set to Visual3 Default"
+	@echo "Cleared memory!!"

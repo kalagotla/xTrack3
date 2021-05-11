@@ -84,6 +84,8 @@ c
      &               0, knode, 0, kcel1, kcel2, kcel3, kcel4,
      &               0, 0, 0, 0,  ksurf, knsurf)
 c
+        call v3zprime(.true., %val(pxyz), knode3, %val(pu),
+     &                      zprime, xpc, ypc, halfw)
 	stop
 	end
 
@@ -722,13 +724,9 @@ c
 c
 c	R-Theta Cuts
 c
+c       To automate some process. Multiple lines were removed
 	if(flag) then
-	  call V3_Cursor(.true.)
- 9	  write(*,*) 'Enter Transformation type ->'
-	  write(*,*) '    1 - X Plane, 2 - Y Plane, 3 - Z Plane:'
-	  read(*,*,end=9,err=9) itype
-	  if(itype .le. 0 .or. itype .gt. 3) go to 9
-	  call V3_Cursor(.false.)
+	  itype = 2
 c
 	  xave = 0.0
 	  yave = 0.0
@@ -752,17 +750,6 @@ c
  2	  continue
 	endif
 c
-	if(itype .eq. 1) then
-	  do 3 i = 1, knode
-	    zp(i) = xyz(1,i)
- 3	  continue
-	  if(flag) then
-	    zprime = xave
-	    xpc    = zave
-	    ypc    = yave
-	    halfw  = (zdev+ydev)/float(knode)
-	  endif
-	endif
 c
 	if(itype .eq. 2) then
 	  do 4 i = 1, knode
@@ -770,23 +757,12 @@ c
  4	  continue
 	  if(flag) then
 	    zprime = 0.409091*1e-3
-	    xpc    = xave
-	    ypc    = zave
-	    halfw  = (xdev+zdev)/float(knode)
+	    xpc    = zave
+	    ypc    = xave
+	    halfw  = 2*(xdev+zdev)/float(knode)
 	  endif
 	endif
 c
-	if(itype .eq. 3) then
-	  do 5 i = 1, knode
-	    zp(i) = xyz(3,i)
- 5	  continue
-	  if(flag) then
-	    zprime = zave
-	    xpc    = yave
-	    ypc    = xave
-	    halfw  = (ydev+xdev)/float(knode)
-	  endif
-	endif
 c
 	return
 	end

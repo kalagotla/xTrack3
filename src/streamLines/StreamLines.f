@@ -230,7 +230,9 @@ C
         DT = SIGN(DTlim, DT)
         DOUBLE = .FALSE.
       ENDIF
-      DT = 1e-9
+C     This DT resets all the adaptiveness of RK4.
+C     Sets the time step to constant
+      DT = 10e-9
 C
 C     CALCULATE A0, INPUT VOLD, K
 3     IF(ID .NE. 1) DT = -DT

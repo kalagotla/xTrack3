@@ -84,8 +84,6 @@ c
      &               0, knode, 0, kcel1, kcel2, kcel3, kcel4,
      &               0, 0, 0, 0,  ksurf, knsurf)
 c
-        call v3zprime(.true., %val(pxyz), knode3, %val(pu),
-     &                      zprime, xpc, ypc, halfw)
 	stop
 	end
 
